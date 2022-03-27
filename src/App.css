@@ -1,0 +1,17 @@
+main {
+  text-align: center;
+  vertical-align: center;
+  background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/5120x2880-dark-blue-solid-color-background.jpg/2560px-5120x2880-dark-blue-solid-color-background.jpg')!important;
+  color:white;
+}
+button{
+  
+  border-radius: 5px !important;
+   background: rgba(255,255,255,0.4);
+ 
+}
+#col{
+    background: rgba(255,255,255,0.4);
+    justify-content: space-around;
+    display: flex;
+}
