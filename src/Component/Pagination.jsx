@@ -1,95 +1,118 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import _ from "lodash"
+import React, { useEffect, useState } from 'react'
 
-const Pagination = () => {
-  const [state, setState] = useState([]);
-  const [paginated, setPaginated] = useState([])
-  const [currentpage, setCurrentPage] = useState(1);
-  const [grid, setGrid] = useState(false)
-  const [list, setList] = useState(true)
+function Pagination({perPageShow,onpagination,total}) {
 
-  const pageSize = 6;
-  const pageCount = state? Math.ceil(state.length / pageSize) : 0
-  const pages = _.range(1, pageCount + 1)
-  
-  const pagination = (pageNo) => {
-      setCurrentPage(pageNo)
-      const startIndex = (pageNo -1)* pageSize;
-      const paginatedPost = _(state).slice(startIndex).take(pageSize).value()
-      setPaginated(paginatedPost)
-  }
-  useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => {
-          setState(res.data)
-          setPaginated(_(res.data).slice(0).take(pageSize).value())
-        });
-  }, []);
+ const [counter,setCounter]=useState(1)  
+ const [numberOfButton]=useState(Math.ceil(total/perPageShow))
+ //use Effect
+ useEffect(()=>{
+  const value=perPageShow*counter
+//   console.log("start :",value-perPageShow)import React, { useEffect, useState } from 'react'
 
-  const listView = () => {
-   setList(true)
-   setGrid(false)
-  }
+function Pagination({perPageShow,onpagination,total}) {
 
-  const gridView = () => {
-   setList(false)
-   setGrid(true)
-  }
-  return (
-    <div className="container">
-        <div className="button_holder my-4">
-            <div>
-                <button className="btn btn-dark mt-5" onClick={() => {listView()} }>List View</button>
-            
-            <button className="btn btn-dark mx-5 mt-5"  onClick={() => {gridView()}}>Grid View</button>
-            </div>
-        </div>
-      <div className="row p-2">
-        {grid === true || list === false ?
-        paginated.map((ele, i) => {
-          return (
-            <div className="col-md-3  col-sm-3 col-sm-3 col-xs-12 card m-4" key={i} id='col'>
-              <div className="card-body" id='card'>
-                <h5 className="card-title">{ele.id}. {ele.title}</h5>
-                <p className="card-text">{ele.body}</p>
-              </div>
-            </div>
-          );
-        }): paginated.map((ele, i) => {
-          return (
-            <div className="card m-3" key={i} id='col'>
-              <div className="card-body">
-                <h5 className="card-title">{ele.id}. {ele.title}</h5>
-                <p className="card-text">{ele.body}</p>
-              </div>
-            </div>
-          );
-        })
+ const [counter,setCounter]=useState(1)  
+ const [numberOfButton]=useState(Math.ceil(total/perPageShow))
+ //use Effect
+ useEffect(()=>{
+  const value=perPageShow*counter
+//   console.log("start :",value-perPageShow)
+//   console.log("end",value);
+onpagination(value-perPageShow,value)
+ },[counter]) 
+ 
+ // prev and next button 
+ const onClickbutton=(type)=>{
+     if(type==="prev"){
+      if( counter===1){
+          setCounter(1)
+      }else{
+          setCounter(counter-1)
+      }
+     }
+     if(type==="next"){
+        if(Math.ceil(total/perPageShow)===counter){
+            setCounter(counter)
+        }else{
+            setCounter(counter+1)
         }
-         <div className="m-2">
-         <nav className="d-flex justify-content-center">
-         <ul className="pagination">
-         {
-          pages.map((page) => {
-            
-              return <li className={
-                  page === currentpage ? "page-item active" : "page-item"
-              }>
-                  <p className="page-link"
-                  onClick={() => pagination(page)}>{page}</p>
-              </li>
-          })
-         }
-         </ul>
-     </nav>
-         </div>
-      </div>
+       }
+ }
+  return (
+      <>
+<div className='d-flex justify-content-center'>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="!#"  onClick={()=>onClickbutton("prev")}>Previous</a></li>
+    {new Array(numberOfButton).fill("").map((ele,index)=>{
+        return (
+            <li className={`page-item ${index+1===counter?"active":null}`}><a className="page-link" href="!#" onClick={()=>{setCounter(index+1)}}>{index+1}</a></li>
+        )
+       
+        })
+    }
     
-      
+     
+    <li class="page-item"><a class="page-link" href="!#"  onClick={()=>onClickbutton("next")}>Next</a></li>
+  </ul>
+</nav>
     </div>
-  );
-};
 
-export default Pagination;
+
+   
+      </>
+    
+  )
+}
+
+export default Pagination
+//   console.log("end",value);
+onpagination(value-perPageShow,value)
+ },[counter]) 
+ 
+ // prev and next button 
+ const onClickbutton=(type)=>{
+     if(type==="prev"){
+      if( counter===1){
+          setCounter(1)
+      }else{
+          setCounter(counter-1)
+      }
+     }
+     if(type==="next"){
+        if(Math.ceil(total/perPageShow)===counter){
+            setCounter(counter)
+        }else{
+            setCounter(counter+1)
+        }
+       }
+ }
+  return (
+      <>
+<div className='d-flex justify-content-center'>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="!#"  onClick={()=>onClickbutton("prev")}>Previous</a></li>
+    {new Array(numberOfButton).fill("").map((ele,index)=>{
+        return (
+            <li className={`page-item ${index+1===counter?"active":null}`}><a className="page-link" href="!#" onClick={()=>{setCounter(index+1)}}>{index+1}</a></li>
+        )
+       
+        })
+    }
+    
+     
+    <li class="page-item"><a class="page-link" href="!#"  onClick={()=>onClickbutton("next")}>Next</a></li>
+  </ul>
+</nav>
+    </div>
+
+
+   
+      </>
+    
+  )
+}
+
+export default Pagination
+
